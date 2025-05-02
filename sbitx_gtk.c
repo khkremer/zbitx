@@ -4159,6 +4159,7 @@ void zbitx_poll(int all){
 	if ((reply_length = i2cbb_read_rll(0xa, buff)) != -1){
 	//zero terminate the reply
 		buff[reply_length] = 0;
+printf("reading data from i2c: %s\n", buff);
 
 		if(!strncmp(buff, "FT8 ", 4)){
 			char ft8_message[100];
@@ -4167,6 +4168,10 @@ void zbitx_poll(int all){
 			remote_execute(ft8_message);
 			printf("FT8 processing from zbitx\n");
 		}
+    else if (!strncmp(buff, "SHUTDOWN", 8)) {
+printf("Shutting down system...\n");
+			system("/usr/bin/sudo /sbin/halt");
+    }
 		else{
 			if (!strncmp(buff, "OPEN", 4)){
 				update_logs = 1;
