@@ -6,8 +6,9 @@ F=$@
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 date
 cd /home/pi/sbitx
-git remote set-url origin https://github.com/afarhan/zbitx
+# git remote set-url origin https://github.com/afarhan/zbitx
+git remote set-url origin https://github.com/khkremer/zbitx
 git pull
-git checkout farhandev
+# git checkout farhandev
 ./build sbitx
 echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
