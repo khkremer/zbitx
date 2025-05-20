@@ -74,8 +74,10 @@ static void clear_SDA(){ // Actively drive SDA signal low
 }
 
 static void arbitration_lost(char * where) {
+#ifdef DEBUG_I2C
     printf("I2CBB connection lost:");
     puts(where);
+#endif
 		int i2c_error = -1;
 }
 
@@ -193,8 +195,10 @@ static int i2c_write_byte(int send_start, int send_stop, uint8_t byte) {
     int nack = 0;
 
 		static int mutex = 0;
+#ifdef DEBUG_I2C
 		if (mutex)
 			printf("double!\n");
+#endif
 		mutex++;
     if (send_start) {
         i2c_start_cond();
@@ -287,7 +291,9 @@ int32_t i2cbb_write_i2c_block_data(uint8_t i2c_address, uint8_t command,
 	for (int i = 0; i < 100; i++){
 		if (!i2c_busy)
 			break;
+#ifdef DEBUG_I2C
 		printf("i2c busy\n");
+#endif
 		delay(2);
 	}
 	i2c_busy++;
@@ -312,17 +318,23 @@ int32_t i2cbb_write_i2c_block_data(uint8_t i2c_address, uint8_t command,
         return i2c_error;
 			}
 			i2c_error = -1;
+#ifdef DEBUG_I2C
 		  printf("i2cbb: write byte failed at index %d\n", i);
+#endif
       }
       else{
         i2c_stop_cond();
+#ifdef DEBUG_I2C
 				printf("i2cbb: command failed\n");
+#endif
 			}
    }
    else{
     i2c_stop_cond();
+#ifdef DEBUG_I2C
 		printf("i2cbb: address failed %x, cmd %x, length%d\n",
 			address, command, length);
+#endif
 	}
 	i2c_busy--;
   return -1;
@@ -337,13 +349,17 @@ int32_t i2cbb_read_i2c_block_data(uint8_t i2c_address, uint8_t command, uint8_t 
 	//static int i2c_write_byte(int send_start, int send_stop, uint8_t byte) 
 	if (i2c_write_byte(1, 0, address)){ 
 		i2c_stop_cond();
+#ifdef DEBUG_I2C
 		printf("i2cbb.c:writing address failed\n");
+#endif
 		return -1;
 	}
 
   if (i2c_write_byte(0, 0, command)){
 		i2c_stop_cond();
+#ifdef DEBUG_I2C
 		printf("i2cbb.c:writing command failed\n");
+#endif
 		return -1;
 	}
 	i2c_stop_cond();

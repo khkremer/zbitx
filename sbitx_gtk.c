@@ -3891,10 +3891,12 @@ long get_freq(){
 
 
 void bin_dump(int length, uint8_t *data){
+#ifdef DEBUG_I2C
 	printf("i2c: ");
 	for (int i = 0; i < length; i++)
 		printf("%x ", data[i]);
 	printf("\n");
+#endif
 }
 
 int  web_get_console(char *buff, int max){
@@ -4159,7 +4161,9 @@ void zbitx_poll(int all){
 	if ((reply_length = i2cbb_read_rll(0xa, buff)) != -1){
 	//zero terminate the reply
 		buff[reply_length] = 0;
+#ifdef DEBUG_I2C
 printf("reading data from i2c: %s\n", buff);
+#endif
 
 		if(!strncmp(buff, "FT8 ", 4)){
 			char ft8_message[100];
